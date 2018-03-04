@@ -2,13 +2,11 @@ package com.jianglibo.tojsonapi.model;
 
 import java.util.Date;
 
-public class MyUser {
+public class MyUser extends BaseModel {
 	
 	private String username;
 	
 	private Date birthDay;
-	
-	private long id;
 
 	public String getUsername() {
 		return username;
@@ -24,14 +22,6 @@ public class MyUser {
 
 	public void setBirthDay(Date birthDay) {
 		this.birthDay = birthDay;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 	
 }
