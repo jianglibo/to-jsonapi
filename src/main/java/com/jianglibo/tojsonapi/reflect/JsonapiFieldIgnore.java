@@ -5,7 +5,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 
 @Retention(RUNTIME)
-public @interface JsonapiResource {
-	String type();
-	String nameInUrl() default "";
+public @interface JsonapiFieldIgnore {
+
 }

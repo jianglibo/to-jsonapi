@@ -2,11 +2,13 @@ package com.jianglibo.tojsonapi.model;
 
 import java.util.Date;
 
-public class MyUser extends BaseModel {
+public class MyUserNoAnnotation extends BaseModel {
 	
 	private String username;
 	
 	private Date birthDay;
+	
+	private long uniqueNumber;
 
 	public String getUsername() {
 		return username;
@@ -22,6 +24,14 @@ public class MyUser extends BaseModel {
 
 	public void setBirthDay(Date birthDay) {
 		this.birthDay = birthDay;
+	}
+
+	public long getUniqueNumber() {
+		return uniqueNumber;
+	}
+
+	public void setUniqueNumber(long uniqueNumber) {
+		this.uniqueNumber = uniqueNumber;
 	}
 	
 }

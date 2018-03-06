@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.jianglibo.tojsonapi.structure.TestJohnzon" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-03-05T07:27:40" hostname="admin-PC" time="0.051">
+  <properties/>
+  <testcase name="t" classname="com.jianglibo.tojsonapi.structure.TestJohnzon" time="0.051"/>
+  <system-out><![CDATA[{
+  "attributes":{
+    "birthDay":null,
+    "uniqueNumber":0,
+    "username":null
+  },
+  "id":null,
+  "type":"myusernoannotations"
+}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

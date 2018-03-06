@@ -1,10 +1,14 @@
 package com.jianglibo.tojsonapi.structure;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.jianglibo.tojsonapi.reflect.JsonapiField;
+import com.jianglibo.tojsonapi.reflect.JsonapiFieldIgnore;
 import com.jianglibo.tojsonapi.reflect.JsonapiId;
 import com.jianglibo.tojsonapi.reflect.JsonapiResource;
 
@@ -31,15 +35,25 @@ public class ResourceObject<T> implements CanAsMap {
 		
 		if (jr != null) {
 			this.setType(jr.type());
+		} else {
+			this.setType(c.getSimpleName().toLowerCase() + "s");
 		}
 		
 		Field fieldHasNameId = null;
+		List<Field> fields = new ArrayList<>();
+		Class<?> sc = c;
+		do {
+			Field[] superFields = sc.getDeclaredFields();
+			for (int i = 0; i < superFields.length; i++) {
+				Field field = superFields[i];
+				fields.add(field);
+			}
+		} while ((sc = sc.getSuperclass()) != null && sc != Object.class);
 		
-		Field[] fields = c.getFields();
 		boolean idReady = false;
-		for (int i = 0; i < fields.length; i++) {
-			Field f = fields[i];
+		for (Field f : fields) {
 			boolean skipField = false;
+			f.setAccessible(true);
 			if (!idReady) {
 				JsonapiId an = f.getAnnotation(JsonapiId.class);
 				if (an != null) {
@@ -53,7 +67,19 @@ public class ResourceObject<T> implements CanAsMap {
 			}
 			
 			if (!skipField) {
-				attributes.put(f.getName(), getFieldValue(f).orElse(null));
+				JsonapiFieldIgnore jfii = f.getAnnotation(JsonapiFieldIgnore.class);
+				if (jfii != null) {
+					skipField = true;
+				}
+			}
+			
+			if (!skipField) {
+				JsonapiField jf = f.getAnnotation(JsonapiField.class);
+				if (jf != null && !jf.name().isEmpty()) {
+					attributes.put(jf.name(), getFieldValue(f).orElse(null));
+				} else {
+					attributes.put(f.getName(), getFieldValue(f).orElse(null));					
+				}
 			}
 		}
 		
@@ -105,5 +131,14 @@ public class ResourceObject<T> implements CanAsMap {
 	public void setType(String type) {
 		this.type = type;
 	}
+	
+	public Map<String, Object> getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(Map<String, Object> attributes) {
+		this.attributes = attributes;
+	}
+
 
 }

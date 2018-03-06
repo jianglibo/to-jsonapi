@@ -3,17 +3,17 @@ package com.jianglibo.tojsonapi.structure;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LinkObject implements CanAsMap {
-	
-	private Map<String, Object> map = new HashMap<>();
+public class LinkObject {
 	
 	private String href;
 	
-	private Meta meta;
-
-	@Override
-	public Map<String, Object> asMap() {
-		return map;
+	private Map<String, Object> meta;
+	
+	public void addMeta(String key, Object value) {
+		if (this.meta == null) {
+			this.meta = new HashMap<>();
+		}
+		this.meta.put(key, value);
 	}
 
 	public String getHref() {
@@ -22,16 +22,6 @@ public class LinkObject implements CanAsMap {
 
 	public void setHref(String href) {
 		this.href = href;
-		this.map.put("href", href);
-	}
-
-	public Meta getMeta() {
-		return meta;
-	}
-
-	public void setMeta(Meta meta) {
-		this.meta = meta;
-		this.asMap().put("meta", meta);
 	}
 
 }
