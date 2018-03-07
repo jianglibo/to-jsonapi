@@ -89,7 +89,5 @@ public class JsonapiError {
 	public void setMeta(Map<String, Object> meta) {
 		this.meta = meta;
 	}
-	
-	
 
 }

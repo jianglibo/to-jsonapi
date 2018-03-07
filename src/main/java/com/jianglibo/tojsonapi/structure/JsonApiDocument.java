@@ -1,5 +1,6 @@
 package com.jianglibo.tojsonapi.structure;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,13 @@ public class JsonApiDocument<T> implements CanAsMap {
 	
 	private List<T> pojos;
 	
-	private boolean isList = false;
+	private List<JsonapiError> errors;
+	
+	private Map<String, Object> meta;
+	
+	private Links links = new Links();
+	
+	private List<ResourceObject<?>> included;
 	
 	public JsonApiDocument(T pojo) {
 		this.pojo = pojo;
@@ -21,21 +28,38 @@ public class JsonApiDocument<T> implements CanAsMap {
 	
 	public JsonApiDocument(List<T> pojos) {
 		this.pojos = pojos;
-		this.isList = true;
 	}
 	
+	public void addSelfLink(String url) {
+		this.links.addStringLink("self", url);
+	}
 	
+	public void addRelatedLink(String url) {
+		this.links.addStringLink("related", url);
+	}
 	
 	@Override
 	public Map<String, Object> asMap() {
-		if (isList) {
-			map.put("data", pojos.stream().map(pj -> new ResourceObject<>(pj)).collect(Collectors.toList()));
+		if (this.errors == null) {
+			if (this.pojos != null) {
+				map.put("data", pojos.stream().map(pj -> new ResourceObject<>(pj)).map(jo -> jo.asMap()).collect(Collectors.toList()));
+			} else if (pojo != null) {
+				map.put("data", new ResourceObject<T>(pojo).asMap());
+			} else {
+				map.put("data", new ArrayList<>());
+			}
+			map.remove("errors");
 		} else {
-			map.put("data", new ResourceObject<T>(pojo));
+			map.put("errors", this.errors);
+			map.remove("data");
+		}
+		map.put("meta", this.meta);
+		if (this.links != null) {
+			map.put("links", links.asMap());
+		}
+		if (this.included != null) {
+			map.put("included", this.included);
 		}
 		return map;
 	}
-	
-	
-
 }

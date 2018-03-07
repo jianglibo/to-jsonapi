@@ -94,8 +94,9 @@ public class ResourceObject<T> implements CanAsMap {
 		Optional<Object> oo = getFieldValue(f);
 		if (oo.isPresent()) {
 			this.setId(oo.get().toString());
+		} else {
+			this.setId(null);
 		}
-		this.setId(null);
 	}
 
 	private Optional<Object> getFieldValue(Field f) {
@@ -139,6 +140,4 @@ public class ResourceObject<T> implements CanAsMap {
 	public void setAttributes(Map<String, Object> attributes) {
 		this.attributes = attributes;
 	}
-
-
 }
