@@ -21,7 +21,7 @@ public class TestMyUserWithAnnotation {
 	@Test
 	public void testOne() {
 		MyUserWithAnnotation user = new MyUserWithAnnotation();
-		ResourceObject<MyUserWithAnnotation> ro = new ResourceObject<MyUserWithAnnotation>(user);
+		ResourceObject ro = new ResourceObject(user);
 		assertNull(ro.getId());
 		assertFalse("attributes shouldn't contains id field.", ro.getAttributes().containsKey("id"));
 		assertFalse(ro.getAttributes().containsKey("type"));

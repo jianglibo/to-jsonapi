@@ -3,6 +3,7 @@ package com.jianglibo.tojsonapi.structure;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -12,20 +13,25 @@ import com.jianglibo.tojsonapi.reflect.JsonapiFieldIgnore;
 import com.jianglibo.tojsonapi.reflect.JsonapiId;
 import com.jianglibo.tojsonapi.reflect.JsonapiResource;
 
-public class ResourceObject<T> implements CanAsMap {
+public class ResourceObject implements CanAsMap {
 	
-	private Map<String, Object> map = new HashMap<>();
+	private Map<String, Object> map = new LinkedHashMap<>();
 	
 	private Map<String, Object> attributes = new HashMap<>();
 
 	private String id;
 	private String type;
 	
-	private T pojo;
+	private Object pojo;
 	
-	public ResourceObject(T pojo) {
+	private Links links = new Links();
+	
+	public void addSelfLink(String url) {
+		this.links.addStringLink("self", url);
+	}
+	
+	public ResourceObject(Object pojo) {
 		this.pojo = pojo;
-		this.map.put("attributes", new HashMap<String, Object>());
 		this.buildAttributes();
 	}
 
@@ -111,10 +117,11 @@ public class ResourceObject<T> implements CanAsMap {
 
 	@Override
 	public Map<String, Object> asMap() {
-		map.put("id", id);
-		map.put("type", type);
-		map.put("attributes", attributes);
-		return map;
+		this.map.put("id", id);
+		this.map.put("type", type);
+		this.map.put("attributes", attributes);
+		this.map.put("links", links.asMap());
+		return this.map;
 	}
 
 	public String getId() {

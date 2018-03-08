@@ -2,7 +2,6 @@ package com.jianglibo.tojsonapi.util;
 
 import java.io.StringWriter;
 import java.util.Date;
-import java.util.Map;
 
 import org.apache.johnzon.mapper.Mapper;
 import org.apache.johnzon.mapper.MapperBuilder;
@@ -38,8 +37,8 @@ public class UtilForTt {
 		return user;
 	}
 	
-	public static ResourceObject<MyUserWithAnnotation> oneRo() {
-		return new ResourceObject<MyUserWithAnnotation>(userWithAnnotation());
+	public static ResourceObject oneRo() {
+		return new ResourceObject(userWithAnnotation());
 	}
 	
 	public static void printJson(Object o) {

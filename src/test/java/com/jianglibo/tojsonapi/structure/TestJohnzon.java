@@ -19,7 +19,7 @@ public class TestJohnzon {
 	@Test
 	public void testNoAnnotationEmptyEntity() throws JSONException {
 		MyUserNoAnnotation user = new MyUserNoAnnotation();
-		ResourceObject<MyUserNoAnnotation> ro = new ResourceObject<MyUserNoAnnotation>(user);
+		ResourceObject ro = new ResourceObject(user);
 		
 		final Mapper mapper = new MapperBuilder().setSkipNull(false).setPretty(true).build();
 		StringWriter sw = new StringWriter();
@@ -51,7 +51,7 @@ public class TestJohnzon {
 		user.setUniqueNumber(33);
 		user.setUsername("myname");
 		
-		ResourceObject<MyUserNoAnnotation> ro = new ResourceObject<MyUserNoAnnotation>(user);
+		ResourceObject ro = new ResourceObject(user);
 		
 		final Mapper mapper = new MapperBuilder().setSkipNull(false).setPretty(true).build();
 		StringWriter sw = new StringWriter();
@@ -75,7 +75,7 @@ public class TestJohnzon {
 	@Test
 	public void testWithAnnotationEmptyEntity() throws JSONException {
 		MyUserWithAnnotation user = new MyUserWithAnnotation();
-		ResourceObject<MyUserWithAnnotation> ro = new ResourceObject<MyUserWithAnnotation>(user);
+		ResourceObject ro = new ResourceObject(user);
 		
 		final Mapper mapper = new MapperBuilder().setSkipNull(false).setPretty(true).build();
 		StringWriter sw = new StringWriter();

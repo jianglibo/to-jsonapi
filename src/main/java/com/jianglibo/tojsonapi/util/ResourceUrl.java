@@ -15,11 +15,19 @@ public class ResourceUrl {
 		this.id = id.toString();
 	}
 	
-	public String getUrl() {
+	public String calUrl() {
 		if (this.id == null) {
 			return "/" + type;
 		} else {
 			return "/" + type + "/" + id;
+		}
+	}
+	
+	public String calUrl(String baseUrlWithSlashEnd) {
+		if (this.id == null) {
+			return baseUrlWithSlashEnd + type;
+		} else {
+			return baseUrlWithSlashEnd + type + "/" + id;
 		}
 	}
 

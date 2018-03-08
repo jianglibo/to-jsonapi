@@ -10,10 +10,10 @@ public class TestResourceUrl {
 	@Test
 	public void build() {
 		ResourceUrl ru = new ResourceUrl("hello");
-		assertThat(ru.getUrl(), equalTo("/hello"));
+		assertThat(ru.calUrl(), equalTo("/hello"));
 		
 		ru = new ResourceUrl("hello", 5);
-		assertThat(ru.getUrl(), equalTo("/hello/5"));
+		assertThat(ru.calUrl(), equalTo("/hello/5"));
 
 	}
 }

@@ -8,16 +8,20 @@ public class Links implements CanAsMap {
 	private Map<String, Object> map = new HashMap<>();
 	
 	public void addStringLink(String linkName, String linkUrl) {
-		this.asMap().put(linkName, linkUrl);
+		this.map.put(linkName, linkUrl);
 	}
 	
 	public void addObjectLink(String linkName, LinkObject linkObject) {
-		this.asMap().put(linkName, linkObject);
+		this.map.put(linkName, linkObject);
+	}
+	
+	public boolean notEmpty() {
+		return !this.map.isEmpty();
 	}
 
 	@Override
 	public Map<String, Object> asMap() {
-		return map;
+		return this.map;
 	}
 
 }

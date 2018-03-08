@@ -10,8 +10,8 @@ public class TestJsonapiDocument {
 	@Test
 	public void testADoc() {
 		MyUserWithAnnotation user = UtilForTt.userWithAnnotation();
-		JsonApiDocument<MyUserWithAnnotation> jd = new JsonApiDocument<MyUserWithAnnotation>(user);
+		ResourceObject ro = new ResourceObjectBuilder("/").build(user);
+		JsonApiDocument jd = new JsonApiDocument(ro);
 		UtilForTt.printJson(jd.asMap());
 	}
-
 }
