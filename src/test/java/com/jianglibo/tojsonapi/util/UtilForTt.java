@@ -8,6 +8,7 @@ import org.apache.johnzon.mapper.MapperBuilder;
 
 import com.jianglibo.tojsonapi.model.MyUserWithAnnotation;
 import com.jianglibo.tojsonapi.structure.ResourceObject;
+import com.jianglibo.tojsonapi.structure.ResourceObjectBuilder;
 
 public class UtilForTt {
 	
@@ -38,7 +39,7 @@ public class UtilForTt {
 	}
 	
 	public static ResourceObject oneRo() {
-		return new ResourceObject(userWithAnnotation());
+		return new ResourceObjectBuilder("/").build(userWithAnnotation());
 	}
 	
 	public static void printJson(Object o) {

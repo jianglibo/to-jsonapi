@@ -8,7 +8,7 @@ import java.lang.annotation.Retention;
 public @interface JsonapiRelation {
 	String name() default "";
 	JsonapiRelationType relationType();
-	Class<?> targetType();
+	Class<?> targetResourceClass();
 	
 	public static enum JsonapiRelationType {
 		ITERABLE, SINGLE, MAP

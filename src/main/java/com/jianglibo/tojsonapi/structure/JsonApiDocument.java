@@ -17,7 +17,7 @@ public class JsonApiDocument implements CanAsMap {
 	private List<JsonapiError> errors;
 	
 	private Map<String, Object> meta;
-	
+
 	private Links links = new Links();
 	
 	private List<ResourceObject> included;
@@ -39,6 +39,13 @@ public class JsonApiDocument implements CanAsMap {
 		this.links.addStringLink("related", url);
 	}
 	
+	public void addMeta(String key, Object value) {
+		if (this.meta == null) {
+			this.meta = new LinkedHashMap<>();
+		}
+		this.meta.put(key, value);
+	}
+	 
 	@Override
 	public Map<String, Object> asMap() {
 		if (this.errors == null) {
@@ -65,4 +72,5 @@ public class JsonApiDocument implements CanAsMap {
 		}
 		return map;
 	}
+	
 }

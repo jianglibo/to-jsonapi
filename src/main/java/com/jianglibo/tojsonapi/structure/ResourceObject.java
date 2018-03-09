@@ -12,6 +12,7 @@ import com.jianglibo.tojsonapi.reflect.JsonapiFieldIgnore;
 import com.jianglibo.tojsonapi.reflect.JsonapiId;
 import com.jianglibo.tojsonapi.reflect.JsonapiRelation;
 import com.jianglibo.tojsonapi.reflect.JsonapiResource;
+import com.jianglibo.tojsonapi.util.ResourceUrl;
 
 public class ResourceObject implements CanAsMap {
 	
@@ -19,7 +20,7 @@ public class ResourceObject implements CanAsMap {
 	
 	private Map<String, Object> attributes = new LinkedHashMap<>();
 	
-	private Map<String, Object> relationships = new LinkedHashMap<>();
+	private Map<String, RelationLink> relationships = new LinkedHashMap<>();
 
 	private String id;
 	private String type;
@@ -28,16 +29,14 @@ public class ResourceObject implements CanAsMap {
 	
 	private Links links = new Links();
 	
-	public void addSelfLink(String url) {
-		this.links.addStringLink("self", url);
-	}
+	private final String baseUrl;
 	
-	public ResourceObject(Object pojo) {
+	protected ResourceObject(String baseUrl, Object pojo) {
+		this.baseUrl = baseUrl;
 		this.pojo = pojo;
-		this.buildAttributes();
 	}
 
-	private void buildAttributes() {
+	protected void buildAttributes() {
 		Class<?> c = this.pojo.getClass();
 		JsonapiResource jr = c.getAnnotation(JsonapiResource.class);
 		
@@ -49,6 +48,8 @@ public class ResourceObject implements CanAsMap {
 		
 		Field fieldHasNameId = null;
 		List<Field> fields = new ArrayList<>();
+		List<Field> relationFields = new ArrayList<>();
+
 		Class<?> sc = c;
 		do {
 			Field[] superFields = sc.getDeclaredFields();
@@ -82,10 +83,9 @@ public class ResourceObject implements CanAsMap {
 			}
 			
 			if (!stopProcess) {
-				JsonapiRelation jrelation = f.getAnnotation(JsonapiRelation.class);
-				if (jrelation != null) {
+				if(f.isAnnotationPresent(JsonapiRelation.class)) {
 					stopProcess = true;
-					Class<?> ft = f.getType();
+					relationFields.add(f);
 				}
 			}
 			
@@ -104,6 +104,27 @@ public class ResourceObject implements CanAsMap {
 			this.attributes.remove("id");
 		}
 		
+//	      "creator" : {
+//	        "links" : {
+//	          "self" : "http://localhost/jsonapi/posts/884737/relationships/creator",
+//	          "related" : "http://localhost/jsonapi/posts/884737/creator"
+//	        }
+//	      },
+		
+		for(Field rf:  relationFields) {
+			JsonapiRelation jra = rf.getAnnotation(JsonapiRelation.class);
+//			Class<?> targetResourceClass = jra.targetResourceClass();
+//			String targetResourceName = AnnotationUtil.getResourceType(targetResourceClass)
+			String relationName = jra.name().isEmpty() ? rf.getName() : jra.name();
+			String thisResourceUrl = new ResourceUrl(getType(), getId()).calUrl(baseUrl);
+			String selfUrl =  thisResourceUrl + "/relationships/" + relationName;
+			String relatedUrl = thisResourceUrl + "/" + relationName;
+			RelationLink rl = new RelationLink();
+			rl.addSelfLink(selfUrl);
+			rl.addRelatedLink(relatedUrl);
+			this.relationships.put(relationName, rl);
+			
+		}
 	}
 
 	private void setIdField(Field f) {
@@ -130,6 +151,10 @@ public class ResourceObject implements CanAsMap {
 		this.map.put("id", id);
 		this.map.put("type", type);
 		this.map.put("attributes", attributes);
+		if (this.relationships != null && !this.relationships.isEmpty()) {
+			this.map.put("relationships", relationships);
+		}
+		this.links.addStringLink("self", new ResourceUrl(getType(), getId()).calUrl(baseUrl));
 		this.map.put("links", links.asMap());
 		return this.map;
 	}

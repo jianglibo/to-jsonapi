@@ -22,7 +22,7 @@ public class MyUserWithAnnotation extends BaseModel {
 	
 	private long uniqueNumber;
 	
-	@JsonapiRelation(targetType=MyRole.class, relationType=JsonapiRelationType.ITERABLE)
+	@JsonapiRelation(targetResourceClass=MyRole.class, relationType=JsonapiRelationType.ITERABLE)
 	private List<MyRole> roles;
 
 	public String getUsername() {

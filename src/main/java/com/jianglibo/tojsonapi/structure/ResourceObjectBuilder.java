@@ -1,8 +1,5 @@
 package com.jianglibo.tojsonapi.structure;
 
-import com.jianglibo.tojsonapi.util.AnnotationUtil;
-import com.jianglibo.tojsonapi.util.ResourceUrl;
-
 public class ResourceObjectBuilder {
 	
 	private String baseUrl;
@@ -12,9 +9,8 @@ public class ResourceObjectBuilder {
 	}
 	
 	public ResourceObject build(Object resource) {
-		ResourceObject ro = new ResourceObject(resource);
-		String selfLink = new ResourceUrl(AnnotationUtil.getResourceType(resource.getClass()).orElse(""), ro.getId()).calUrl(baseUrl); 
-		ro.addSelfLink(selfLink);
+		ResourceObject ro = new ResourceObject(this.baseUrl, resource);
+		ro.buildAttributes();
 		return ro;
 	}
 
