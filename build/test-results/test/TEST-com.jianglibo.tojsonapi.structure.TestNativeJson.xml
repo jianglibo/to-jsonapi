@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.jianglibo.tojsonapi.structure.TestNativeJson" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-03-09T01:02:08" hostname="admin-PC" time="0.001">
-  <properties/>
-  <testcase name="t1" classname="com.jianglibo.tojsonapi.structure.TestNativeJson" time="0.001"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

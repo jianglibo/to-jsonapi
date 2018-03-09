@@ -1,67 +1,0 @@
-{
-  "id":"0",
-  "type":"hello",
-  "attributes":{
-    "birthDay":null,
-    "roles":null,
-    "un":null,
-    "uniqueNumber":0
-  },
-  "links":{
-
-  }
-}
-{
-  "id":"556",
-   "type":"myusernoannotations",
-  "attributes":{
-&    "birthDay":"20180305155312+0800",
-    "uniqueNumber":33,
-    "username":"myname"
-  },
-  "links":{
-
-  }
-}
-{
-  "id":"0",
-   "type":"myusernoannotations",
-  "attributes":{
-    "birthDay":null,
-    "uniqueNumber":0,
-    "username":null
-  },
-  "links":{
-
-  }
-}
-{
-  "data":{
-    "id":"1",
-    "type":"hello",
-    "attributes":{
-(      "birthDay":"20180305155312+0800",
-      "roles":null,
-      "un":"username",
-      "uniqueNumber":1
-    },
-    "links":{
-      "self":"/hello/1"
-    }
-  }
-}
-{
-  "data":{
-    "id":"3",
-    "type":"hello",
-    "attributes":{
-(      "birthDay":"20180305155312+0800",
-      "roles":null,
-      "un":"username",
-      "uniqueNumber":1
-    },
-    "links":{
-      "self":"/hello/3"
-    }
-  }
-}
