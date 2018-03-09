@@ -2,7 +2,6 @@ package com.jianglibo.tojsonapi.structure;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,13 +10,16 @@ import java.util.Optional;
 import com.jianglibo.tojsonapi.reflect.JsonapiField;
 import com.jianglibo.tojsonapi.reflect.JsonapiFieldIgnore;
 import com.jianglibo.tojsonapi.reflect.JsonapiId;
+import com.jianglibo.tojsonapi.reflect.JsonapiRelation;
 import com.jianglibo.tojsonapi.reflect.JsonapiResource;
 
 public class ResourceObject implements CanAsMap {
 	
 	private Map<String, Object> map = new LinkedHashMap<>();
 	
-	private Map<String, Object> attributes = new HashMap<>();
+	private Map<String, Object> attributes = new LinkedHashMap<>();
+	
+	private Map<String, Object> relationships = new LinkedHashMap<>();
 
 	private String id;
 	private String type;
@@ -58,13 +60,13 @@ public class ResourceObject implements CanAsMap {
 		
 		boolean idReady = false;
 		for (Field f : fields) {
-			boolean skipField = false;
+			boolean stopProcess = false;
 			f.setAccessible(true);
 			if (!idReady) {
 				JsonapiId an = f.getAnnotation(JsonapiId.class);
 				if (an != null) {
 					idReady = true;
-					skipField = true;
+					stopProcess = true;
 					setIdField(f);
 				}
 				if ("id".equals(f.getName())) {
@@ -72,14 +74,22 @@ public class ResourceObject implements CanAsMap {
 				}	
 			}
 			
-			if (!skipField) {
+			if (!stopProcess) {
 				JsonapiFieldIgnore jfii = f.getAnnotation(JsonapiFieldIgnore.class);
 				if (jfii != null) {
-					skipField = true;
+					stopProcess = true;
 				}
 			}
 			
-			if (!skipField) {
+			if (!stopProcess) {
+				JsonapiRelation jrelation = f.getAnnotation(JsonapiRelation.class);
+				if (jrelation != null) {
+					stopProcess = true;
+					Class<?> ft = f.getType();
+				}
+			}
+			
+			if (!stopProcess) {
 				JsonapiField jf = f.getAnnotation(JsonapiField.class);
 				if (jf != null && !jf.name().isEmpty()) {
 					attributes.put(jf.name(), getFieldValue(f).orElse(null));

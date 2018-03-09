@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.jianglibo.tojsonapi.structure.TestJsonapiDocument" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-03-09T01:02:08" hostname="admin-PC" time="0.015">
+  <properties/>
+  <testcase name="testADoc" classname="com.jianglibo.tojsonapi.structure.TestJsonapiDocument" time="0.015"/>
+  <system-out><![CDATA[{
+  "data":{
+    "id":"1",
+    "type":"hello",
+    "attributes":{
+      "birthDay":"20180305155312+0800",
+      "roles":null,
+      "un":"username",
+      "uniqueNumber":1
+    },
+    "links":{
+      "self":"/hello/1"
+    }
+  }
+}
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

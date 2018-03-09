@@ -45,7 +45,12 @@ public class UtilForTt {
 		StringWriter sw = new StringWriter();
 		mapper.writeObject(o, sw);
 		UtilForTt.printme(sw);
+	}
 
+	public static String toJson(Object o) {
+		StringWriter sw = new StringWriter();
+		mapper.writeObject(o, sw);
+		return sw.toString();
 	}
 
 }

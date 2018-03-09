@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.jianglibo.tojsonapi.structure.TestMyUserNoAnnotation" tests="2" skipped="0" failures="1" errors="0" timestamp="2018-03-05T07:27:40" hostname="admin-PC" time="0.005">
+<testsuite name="com.jianglibo.tojsonapi.structure.TestMyUserNoAnnotation" tests="2" skipped="0" failures="1" errors="0" timestamp="2018-03-09T01:02:08" hostname="admin-PC" time="0.001">
   <properties/>
-  <testcase name="testOne" classname="com.jianglibo.tojsonapi.structure.TestMyUserNoAnnotation" time="0.005">
-    <failure message="java.lang.AssertionError: should contain 2 fields.&#10;Expected: &lt;2&gt;&#10;     but: was &lt;3&gt;" type="java.lang.AssertionError">java.lang.AssertionError: should contain 2 fields.
-Expected: &lt;2&gt;
-     but: was &lt;3&gt;
-	at org.hamcrest.MatcherAssert.assertThat(MatcherAssert.java:20)
-	at org.junit.Assert.assertThat(Assert.java:956)
-	at com.jianglibo.tojsonapi.structure.TestMyUserNoAnnotation.testOne(TestMyUserNoAnnotation.java:30)
+  <testcase name="testOne" classname="com.jianglibo.tojsonapi.structure.TestMyUserNoAnnotation" time="0.001">
+    <failure message="java.lang.AssertionError: expected null, but was:&lt;0&gt;" type="java.lang.AssertionError">java.lang.AssertionError: expected null, but was:&lt;0&gt;
+	at org.junit.Assert.fail(Assert.java:88)
+	at org.junit.Assert.failNotNull(Assert.java:755)
+	at org.junit.Assert.assertNull(Assert.java:737)
+	at org.junit.Assert.assertNull(Assert.java:747)
+	at com.jianglibo.tojsonapi.structure.TestMyUserNoAnnotation.testOne(TestMyUserNoAnnotation.java:25)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)

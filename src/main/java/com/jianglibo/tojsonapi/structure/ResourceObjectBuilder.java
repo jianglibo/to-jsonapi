@@ -13,7 +13,7 @@ public class ResourceObjectBuilder {
 	
 	public ResourceObject build(Object resource) {
 		ResourceObject ro = new ResourceObject(resource);
-		String selfLink = new ResourceUrl(AnnotationUtil.getType(resource.getClass()), ro.getId()).calUrl(baseUrl); 
+		String selfLink = new ResourceUrl(AnnotationUtil.getResourceType(resource.getClass()).orElse(""), ro.getId()).calUrl(baseUrl); 
 		ro.addSelfLink(selfLink);
 		return ro;
 	}

@@ -1,9 +1,12 @@
 package com.jianglibo.tojsonapi.model;
 
 import java.util.Date;
+import java.util.List;
 
 import com.jianglibo.tojsonapi.reflect.JsonapiField;
 import com.jianglibo.tojsonapi.reflect.JsonapiFieldIgnore;
+import com.jianglibo.tojsonapi.reflect.JsonapiRelation;
+import com.jianglibo.tojsonapi.reflect.JsonapiRelation.JsonapiRelationType;
 import com.jianglibo.tojsonapi.reflect.JsonapiResource;
 
 @JsonapiResource(type="hello")
@@ -18,6 +21,9 @@ public class MyUserWithAnnotation extends BaseModel {
 	private String ignored;
 	
 	private long uniqueNumber;
+	
+	@JsonapiRelation(targetType=MyRole.class, relationType=JsonapiRelationType.ITERABLE)
+	private List<MyRole> roles;
 
 	public String getUsername() {
 		return username;
@@ -49,6 +55,14 @@ public class MyUserWithAnnotation extends BaseModel {
 
 	public void setIgnored(String ignored) {
 		this.ignored = ignored;
+	}
+
+	public List<MyRole> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<MyRole> roles) {
+		this.roles = roles;
 	}
 
 	
