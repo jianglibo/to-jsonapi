@@ -17,7 +17,26 @@ public class Pager {
 		this.totalResourceCount = totalResourceCount;
 		this.perpage = perPage;
 		this.currentPage = currentPage;
-		this.totalPage = totalResourceCount/ perPage + 1;
+		initAndFix();
+	}
+
+	private void initAndFix() {
+		if (this.perpage == 0) {
+			this.perpage = 10;
+		}
+		if (this.currentPage < 1) {
+			this.currentPage = 1;
+		}
+		this.totalPage = this.totalResourceCount / this.perpage;
+		if (this.totalResourceCount % this.perpage != 0) {
+			this.totalPage = this.totalPage + 1;
+		}
+		if (this.totalPage == 0L) {
+			this.totalPage = 1;
+		}
+		if (this.currentPage > this.totalPage) {
+			this.currentPage = this.totalPage;
+		}
 	}
 
 	public long getTotalResourceCount() {
@@ -44,44 +63,49 @@ public class Pager {
 		this.currentPage = currentPage;
 	}
 	
-	private long getPrevPage() {
-		long prev = this.currentPage - 1;
-		if (prev < 1) {
-			prev = 1;
-		}
-		return prev;
-	}
-
-	private long getNextPage() {
-		long next = this.currentPage + 1;
-		if (next < this.totalPage) {
-			next = this.totalPage;
-		}
-		return next;
+	public Map<String, String> getLimitOffsetLinks() {
+		return getLimitOffsetLinks("");
 	}
 	
-	public Map<String, String> getLimitOffsetLinks() {
-		String firstUrl, lastUrl, prevUrl, nextUrl;
+	public Map<String, String> getLimitOffsetLinks(String urlPrefix) {
+		String firstUrl, lastUrl, prevUrl, nextUrl, alteredPrefix;
+		if (urlPrefix != null && urlPrefix.length() > 0) {
+			if (urlPrefix.indexOf('?') == -1) {
+				alteredPrefix = urlPrefix + "?";
+			} else {
+				if (!urlPrefix.endsWith("?")) {
+					if (!urlPrefix.endsWith("&")) {
+						alteredPrefix = urlPrefix + "&";
+					} else {
+						alteredPrefix = urlPrefix;
+					}
+				} else {
+					alteredPrefix = urlPrefix;
+				}
+			}
+		} else {
+			alteredPrefix = "";
+		}
 		Map<String, String> links = new LinkedHashMap<>();
 		firstUrl = String.format("page[limit]=%s", this.perpage);
 		if (this.totalPage == 1) {
-			lastUrl = String.format("page[limit]=%s", this.perpage);
+			lastUrl = String.format("%spage[limit]=%s",alteredPrefix, this.perpage);
 		} else {
-			lastUrl = String.format("page[limit]=%s&page[offset]=%s", this.perpage, (this.totalPage - 1) * this.perpage);
+			lastUrl = String.format("%spage[offset]=%s&page[limit]=%s", alteredPrefix, (this.totalPage - 1) * this.perpage, this.perpage);
 		}
 		
 		if (this.currentPage == 1) {
 			prevUrl = null;
 		} else if (this.getCurrentPage() == 2) {
-			prevUrl = String.format("page[limit]=%s", this.perpage);
+			prevUrl = String.format("%spage[limit]=%s", alteredPrefix, this.perpage);
 		} else {
-			prevUrl = String.format("page[limit]=%s&page[offset]=%s", this.perpage, (this.currentPage - 1) * this.perpage);
+			prevUrl = String.format("%spage[offset]=%s&page[limit]=%s", alteredPrefix, (this.currentPage - 1) * this.perpage, this.perpage);
 		}
 		
 		if (this.currentPage == this.totalPage) {
 			nextUrl = null;
 		} else {
-			nextUrl = String.format("page[limit]=%s&page[offset]=%s", this.perpage, this.currentPage * this.perpage);
+			nextUrl = String.format("%spage[offset]=%s&page[limit]=%s", alteredPrefix, this.currentPage * this.perpage, this.perpage);
 		}
 		
 		links.put("first", firstUrl);
