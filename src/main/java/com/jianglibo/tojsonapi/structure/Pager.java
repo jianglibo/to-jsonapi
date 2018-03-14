@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class Pager {
 	
-	protected static Pattern pagePattern = Pattern.compile("page\\[([^]]+)\\]=\\d+");
+	protected static Pattern pagePattern = Pattern.compile("page\\[([^]]+)\\]=(\\d+)");
 	
 	private long totalResourceCount;
 	
@@ -18,6 +18,8 @@ public class Pager {
 	private long totalPage;
 	
 	private String currentUrl;
+	
+	public Pager() {}
 	
 	public Pager(long totalResourceCount, String currentUrl) {
 		this.totalResourceCount = totalResourceCount;
@@ -115,7 +117,6 @@ public class Pager {
 		} else {
 			alteredPrefix = "";
 		}
-		Map<String, String> links = new LinkedHashMap<>();
 		firstUrl = String.format("page[limit]=%s", this.perpage);
 		if (this.totalPage == 1) {
 			lastUrl = String.format("%spage[limit]=%s",alteredPrefix, this.perpage);
@@ -137,10 +138,17 @@ public class Pager {
 			nextUrl = String.format("%spage[offset]=%s&page[limit]=%s", alteredPrefix, this.currentPage * this.perpage, this.perpage);
 		}
 		
-		links.put("first", firstUrl);
-		links.put("last", lastUrl);
-		links.put("prev", prevUrl);
-		links.put("next", nextUrl);
+		return assembleLinks(firstUrl, lastUrl, prevUrl, nextUrl);
+		
+	}
+	
+	protected Map<String, String> assembleLinks(String first, String last, String prev, String next) {
+		Map<String, String> links = new LinkedHashMap<>();
+		
+		links.put("first", first);
+		links.put("last", last);
+		links.put("prev", prev);
+		links.put("next", next);
 		
 		return links;
 	}
