@@ -1,5 +1,12 @@
 package com.jianglibo.tojsonapi.structure;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.util.regex.Matcher;
+
 import org.json.JSONException;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -7,6 +14,27 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import com.jianglibo.tojsonapi.util.UtilForTt;
 
 public class TestPager {
+	
+	@Test
+	public void tPagePattern() {
+		Matcher m = Pager.pagePattern.matcher("page[abc]=55");
+		assertTrue(m.matches());
+		m = Pager.pagePattern.matcher("page[abc]]=55");
+		assertFalse(m.matches());
+	}
+	
+	@Test
+	public void tPagePatterns() {
+		Matcher m = Pager.pagePattern.matcher("page[abc]=55&page[yy]=60");
+		int i = 0;
+		String s = "";
+		while(m.find()) {
+			i++;
+			s+= m.group(1);
+		}
+		assertThat("should find 2 matches", i, equalTo(2));
+		assertThat(s, equalTo("abcyy"));
+	}
 	
 	@Test
 	public void testZeroPage() throws JSONException {

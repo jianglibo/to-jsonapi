@@ -2,8 +2,12 @@ package com.jianglibo.tojsonapi.structure;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Pager {
+	
+	protected static Pattern pagePattern = Pattern.compile("page\\[([^]]+)\\]=\\d+");
 	
 	private long totalResourceCount;
 	
@@ -13,6 +17,31 @@ public class Pager {
 	
 	private long totalPage;
 	
+	private String currentUrl;
+	
+	public Pager(long totalResourceCount, String currentUrl) {
+		this.totalResourceCount = totalResourceCount;
+		this.currentUrl = currentUrl;
+		initByUrl();
+	}
+	
+	private void initByUrl() {
+		Matcher m = pagePattern.matcher(this.currentUrl);
+		String offset = "";
+		while(m.find()) {
+			String ps = m.group(1);
+			switch (ps) {
+			case "limit":
+				this.perpage = Integer.valueOf(ps); 
+				break;
+			case "offset":
+				offset = ps;
+			default:
+				break;
+			}
+		}
+	}
+
 	public Pager(long totalResourceCount, int perPage, long currentPage) {
 		this.totalResourceCount = totalResourceCount;
 		this.perpage = perPage;
