@@ -5,8 +5,13 @@ import java.util.regex.Matcher;
 
 public class OffsetlimitPager extends Pager {
 	
-	private String offsetName;
-	private String limitName;
+	private final String offsetName;
+	private final String limitName;
+	
+	public OffsetlimitPager() {
+		this.offsetName = "offset";
+		this.limitName = "limit";
+	}
 
 	public OffsetlimitPager(String offsetName, String limitName) {
 		this.offsetName = offsetName;
@@ -14,13 +19,15 @@ public class OffsetlimitPager extends Pager {
 	}
 	
 	
-	public Map<String, String> calLinks(long totalResourceCount, String currentUrl) {
-		Matcher m = pagePattern.matcher(currentUrl);
-		String offsetValue = null, limitValue = null;
+	@Override
+	public Map<String, String> calLinks(long totalResourceCount, String requestUrl) {
+		Matcher m = pagePattern.matcher(requestUrl);
+		String offsetValue = null, limitValue = null, currentOffsetString = null;
 		while(m.find()) {
 			String ps = m.group(1);
 			if (ps.equals(this.offsetName)) {
 				offsetValue = m.group(2);
+				currentOffsetString = m.group();
 			} else if (ps.equals(this.limitName)) {
 				limitValue = m.group(2);
 			}
@@ -39,25 +46,20 @@ public class OffsetlimitPager extends Pager {
 		long prevOffset = currentOffset - limit;
 		long lastOffset = (totalResourceCount / limit ) * limit;
 		
-		String offsetUrlPtn = "page[" + this.offsetName + "]=\\d+";
+		first = removeOffsetParameter(requestUrl, currentOffsetString);
 		
-		first = currentUrl.replaceFirst(offsetUrlPtn, "");
 		if (nextOffset >= totalResourceCount) { // only one page.
 			next = null;
 		} else {
-			if (offsetValue != null) {
-				next = currentUrl.replaceFirst(offsetUrlPtn, "page[" + this.offsetName + "]=" + nextOffset);
-			} else {
-				next = currentUrl.replace("page[", "page[" + this.offsetName + "]=" + nextOffset + "&page[");
-			}
+			next = replaceOrInsertOffset(requestUrl, currentOffsetString, nextOffset);
 		}
 		
 		if (prevOffset < 0) {
 			prev = null;
 		} else if(prevOffset == 0) {
-			prev = currentUrl.replaceFirst(offsetUrlPtn, "");
+			prev = removeOffsetParameter(requestUrl, currentOffsetString);
 		} else {
-			prev = currentUrl.replaceFirst(offsetUrlPtn, "page[" + this.offsetName + "]=" + prevOffset);
+			prev = replaceOrInsertOffset(requestUrl, currentOffsetString, prevOffset);
 		}
 		
 		if (lastOffset == totalResourceCount) {
@@ -68,17 +70,24 @@ public class OffsetlimitPager extends Pager {
 		}
 		
 		if (lastOffset == 0) {
-			last = currentUrl.replaceFirst(offsetUrlPtn, "");
+			last = removeOffsetParameter(requestUrl, currentOffsetString);
 		} else {
-			if (offsetValue != null) {
-				last = currentUrl.replaceFirst(offsetUrlPtn, "page[" + this.offsetName + "]=" + lastOffset);
-			} else {
-				last = currentUrl.replace("page[", "page[" + this.offsetName + "]=" + lastOffset + "&page[");
-			}
+			last = replaceOrInsertOffset(requestUrl, currentOffsetString, lastOffset);
 		}
 		
 		return assembleLinks(first, last, prev, next);
 	}
-	
+
+
+	private String replaceOrInsertOffset(String currentUrl, String stringTobeReplaced,
+			long newValue) {
+		String next;
+		if (stringTobeReplaced != null) {
+			next = currentUrl.replace(stringTobeReplaced, "page[" + this.offsetName + "]=" + newValue);
+		} else {
+			next = currentUrl.replace("page[", "page[" + this.offsetName + "]=" + newValue + "&page[");
+		}
+		return next;
+	}
 
 }

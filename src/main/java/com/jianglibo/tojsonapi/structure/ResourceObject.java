@@ -27,12 +27,12 @@ public class ResourceObject implements CanAsMap {
 	
 	private Object pojo;
 	
-	private Links links = new Links();
+	private Map<String, Object> links = new LinkedHashMap<>();
 	
-	private final String baseUrl;
+	private final String requestUrl;
 	
-	protected ResourceObject(String baseUrl, Object pojo) {
-		this.baseUrl = baseUrl;
+	protected ResourceObject(String requestUrl, Object pojo) {
+		this.requestUrl = requestUrl;
 		this.pojo = pojo;
 	}
 
@@ -116,7 +116,7 @@ public class ResourceObject implements CanAsMap {
 //			Class<?> targetResourceClass = jra.targetResourceClass();
 //			String targetResourceName = AnnotationUtil.getResourceType(targetResourceClass)
 			String relationName = jra.name().isEmpty() ? rf.getName() : jra.name();
-			String thisResourceUrl = new ResourceUrl(getType(), getId()).calUrl(baseUrl);
+			String thisResourceUrl = new ResourceUrl(getType(), getId()).calUrl(requestUrl);
 			String selfUrl =  thisResourceUrl + "/relationships/" + relationName;
 			String relatedUrl = thisResourceUrl + "/" + relationName;
 			RelationLink rl = new RelationLink();
@@ -154,8 +154,8 @@ public class ResourceObject implements CanAsMap {
 		if (this.relationships != null && !this.relationships.isEmpty()) {
 			this.map.put("relationships", relationships);
 		}
-		this.links.addStringLink("self", new ResourceUrl(getType(), getId()).calUrl(baseUrl));
-		this.map.put("links", links.asMap());
+		this.links.put("self", new ResourceUrl(getType(), getId()).calUrl(requestUrl));
+		this.map.put("links", links);
 		return this.map;
 	}
 

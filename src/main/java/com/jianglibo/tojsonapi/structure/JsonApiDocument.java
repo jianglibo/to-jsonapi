@@ -18,7 +18,7 @@ public class JsonApiDocument implements CanAsMap {
 	
 	private Map<String, Object> meta;
 
-	private Links links = new Links();
+	private Map<String, Object> links;
 	
 	private List<ResourceObject> included;
 	
@@ -32,11 +32,24 @@ public class JsonApiDocument implements CanAsMap {
 	}
 	
 	public void addSelfLink(String url) {
-		this.links.addStringLink("self", url);
+		if (this.links == null) {
+			this.links = new LinkedHashMap<>();
+		}
+		this.links.put("self", url);
 	}
 	
 	public void addRelatedLink(String url) {
-		this.links.addStringLink("related", url);
+		if (this.links == null) {
+			this.links = new LinkedHashMap<>();
+		}
+		this.links.put("related", url);
+	}
+	
+	public void addLink(String linkName, Object linkValue) {
+		if (this.links == null) {
+			this.links = new LinkedHashMap<>();
+		}
+		this.links.put(linkName, linkValue);
 	}
 	
 	public void addMeta(String key, Object value) {
@@ -64,8 +77,8 @@ public class JsonApiDocument implements CanAsMap {
 		if (this.meta != null) {
 			map.put("meta", this.meta);
 		}
-		if (this.links != null && this.links.notEmpty()) {
-			map.put("links", links.asMap());
+		if (this.links != null && this.links.size() > 0) {
+			map.put("links", links);
 		}
 		if (this.included != null) {
 			map.put("included", this.included);

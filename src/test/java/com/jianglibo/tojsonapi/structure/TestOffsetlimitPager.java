@@ -4,14 +4,16 @@ import org.json.JSONException;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
-import com.jianglibo.tojsonapi.structure.PagerBuilder.PaginationType;
+//import com.jianglibo.tojsonapi.structure.PagerBuilder.PaginationType;
 import com.jianglibo.tojsonapi.util.UtilForTt;
 
 public class TestOffsetlimitPager {
 	
+	private Pager olp = new OffsetlimitPager();
+	
 	@Test
 	public void testNoPageParameter() throws JSONException {
-		OffsetlimitPager olp = (OffsetlimitPager) new PagerBuilder(PaginationType.OFFSET_LIMIT, "limit", "offset").newInstance();
+		Pager olp =  new OffsetlimitPager();
 		
 		String s = UtilForTt.toJson(olp.calLinks(0, "http://www.abc.com"));
 		UtilForTt.printme(s);
@@ -28,8 +30,6 @@ public class TestOffsetlimitPager {
 	
 	@Test
 	public void testZeroResourceCount() throws JSONException {
-		OffsetlimitPager olp = (OffsetlimitPager) new PagerBuilder(PaginationType.OFFSET_LIMIT, "limit", "offset").newInstance();
-		
 		String s = UtilForTt.toJson(olp.calLinks(0, "http://www.abc.com?page[limit]=10"));
 		UtilForTt.printme(s);
 		
@@ -44,8 +44,6 @@ public class TestOffsetlimitPager {
 	
 	@Test
 	public void testExactOnePage() throws JSONException {
-		OffsetlimitPager olp = (OffsetlimitPager) new PagerBuilder(PaginationType.OFFSET_LIMIT, "limit", "offset").newInstance();
-		
 		String s = UtilForTt.toJson(olp.calLinks(10, "http://www.abc.com?page[limit]=10"));
 		UtilForTt.printme(s);
 		
@@ -60,8 +58,6 @@ public class TestOffsetlimitPager {
 	
 	@Test
 	public void testMoreThanOnePage() throws JSONException {
-		OffsetlimitPager olp = (OffsetlimitPager) new PagerBuilder(PaginationType.OFFSET_LIMIT, "limit", "offset").newInstance();
-		
 		String s = UtilForTt.toJson(olp.calLinks(12, "http://www.abc.com?page[limit]=10"));
 		UtilForTt.printme(s);
 		
@@ -77,8 +73,6 @@ public class TestOffsetlimitPager {
 	
 	@Test
 	public void testExactTwoPage() throws JSONException {
-		OffsetlimitPager olp = (OffsetlimitPager) new PagerBuilder(PaginationType.OFFSET_LIMIT, "limit", "offset").newInstance();
-		
 		String s = UtilForTt.toJson(olp.calLinks(20, "http://www.abc.com?page[limit]=10"));
 		UtilForTt.printme(s);
 		
@@ -95,8 +89,6 @@ public class TestOffsetlimitPager {
 	
 	@Test
 	public void testManyPage() throws JSONException {
-		OffsetlimitPager olp = (OffsetlimitPager) new PagerBuilder(PaginationType.OFFSET_LIMIT, "limit", "offset").newInstance();
-		
 		String s = UtilForTt.toJson(olp.calLinks(65, "http://www.abc.com?page[limit]=10"));
 		UtilForTt.printme(s);
 		
@@ -105,6 +97,51 @@ public class TestOffsetlimitPager {
 				"  \"last\":\"http://www.abc.com?page[offset]=60&page[limit]=10\",\r\n" + 
 				"  \"prev\":null,\r\n" + 
 				"  \"next\":\"http://www.abc.com?page[offset]=10&page[limit]=10\"\r\n" + 
+				"}", s, true);
+		
+	}
+	
+	@Test
+	public void testManyPageMiddle() throws JSONException {
+		
+		String s = UtilForTt.toJson(olp.calLinks(65, "http://www.abc.com?page[offset]=10&page[limit]=10"));
+		UtilForTt.printme(s);
+		
+		JSONAssert.assertEquals("{\r\n" + 
+				"  \"first\":\"http://www.abc.com?page[limit]=10\",\r\n" + 
+				"  \"last\":\"http://www.abc.com?page[offset]=60&page[limit]=10\",\r\n" + 
+				"  \"prev\":\"http://www.abc.com?page[limit]=10\",\r\n" + 
+				"  \"next\":\"http://www.abc.com?page[offset]=20&page[limit]=10\"\r\n" + 
+				"}", s, true);
+		
+	}
+	
+	@Test
+	public void testManyPageMiddleExtraParams() throws JSONException {
+		
+		String s = UtilForTt.toJson(olp.calLinks(65, "http://www.abc.com?x=y&page[offset]=30&page[limit]=10"));
+		UtilForTt.printme(s);
+		
+		JSONAssert.assertEquals("{\r\n" + 
+				"  \"first\":\"http://www.abc.com?x=y&page[limit]=10\",\r\n" + 
+				"  \"last\":\"http://www.abc.com?x=y&page[offset]=60&page[limit]=10\",\r\n" + 
+				"  \"prev\":\"http://www.abc.com?x=y&page[offset]=20&page[limit]=10\",\r\n" + 
+				"  \"next\":\"http://www.abc.com?x=y&page[offset]=40&page[limit]=10\"\r\n" + 
+				"}", s, true);
+		
+	}
+	
+	@Test
+	public void testManyPageLastExtraParams() throws JSONException {
+		
+		String s = UtilForTt.toJson(olp.calLinks(65, "http://www.abc.com?x=y&page[offset]=60&page[limit]=10"));
+		UtilForTt.printme(s);
+		
+		JSONAssert.assertEquals("{\r\n" + 
+				"  \"first\":\"http://www.abc.com?x=y&page[limit]=10\",\r\n" + 
+				"  \"last\":\"http://www.abc.com?x=y&page[offset]=60&page[limit]=10\",\r\n" + 
+				"  \"prev\":\"http://www.abc.com?x=y&page[offset]=50&page[limit]=10\",\r\n" + 
+				"  \"next\":null\r\n" + 
 				"}", s, true);
 		
 	}

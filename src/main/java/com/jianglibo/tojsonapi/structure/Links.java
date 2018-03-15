@@ -3,7 +3,7 @@ package com.jianglibo.tojsonapi.structure;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Links implements CanAsMap {
+public class Links {
 	
 	private Map<String, Object> map = new HashMap<>();
 	
@@ -18,10 +18,4 @@ public class Links implements CanAsMap {
 	public boolean notEmpty() {
 		return !this.map.isEmpty();
 	}
-
-	@Override
-	public Map<String, Object> asMap() {
-		return this.map;
-	}
-
 }
