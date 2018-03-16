@@ -64,6 +64,4 @@ public class MyUserWithAnnotation extends BaseModel {
 	public void setRoles(List<MyRole> roles) {
 		this.roles = roles;
 	}
-
-	
 }

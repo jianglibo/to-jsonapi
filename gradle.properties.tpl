@@ -1,0 +1,5 @@
+ossrhUsername=
+ossrhPassword=
+signing.keyId=YourKeyId
+signing.password=YourPublicKeyPassword
+signing.secretKeyRingFile=PathToYourKeyRingFile

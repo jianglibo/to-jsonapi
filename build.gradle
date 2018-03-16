@@ -1,9 +1,68 @@
 apply plugin: 'java-library'
 apply plugin: 'eclipse'
+// apply plugin: 'maven-publish'
+
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+// http://central.sonatype.org/pages/gradle.html
 
 repositories {
     jcenter()
 }
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      pom.project {
+        name 'to-jsonapi'
+        packaging 'jar'
+        // optionally artifactId can be defined here 
+        description 'format entities to jsonapi format.'
+        url 'https://github.com/jianglibo/to-jsonapi'
+
+        scm {
+          connection 'scm:git:https://github.com/jianglibo/to-jsonapi'
+          url 'https://github.com/jianglibo/to-jsonapi'
+        }
+
+        licenses {
+          license {
+            name 'The Apache License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          }
+        }
+
+        developers {
+          developer {
+            id 'jianglibo'
+            name 'jianglibo'
+            email 'jianglibo@gmail.com'
+          }
+        }
+      }
+    }
+  }
+}
+
+group = 'com.go2wheel'
+// name = 'to-jsonapi'
+archivesBaseName = "to-jsonapi"
+version = '0.1.0'
 
 dependencies {
     // api 'commons-httpclient:commons-httpclient:3.1'
@@ -15,3 +74,13 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.apache.geronimo.specs/geronimo-json_1.1_spec
 	testCompile group: 'org.apache.geronimo.specs', name: 'geronimo-json_1.1_spec', version: '1.0'
 }
+
+/*
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
+*/
