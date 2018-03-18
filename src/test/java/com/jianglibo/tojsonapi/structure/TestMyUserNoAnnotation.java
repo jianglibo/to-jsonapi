@@ -22,7 +22,7 @@ public class TestMyUserNoAnnotation {
 	public void testOne() {
 		MyUserNoAnnotation user = new MyUserNoAnnotation();
 		ResourceObject ro = new ResourceObjectBuilder("").build(user);
-		assertNull(ro.getId());
+		assertThat("unassigned id should be a string 0", ro.getId(), equalTo("0"));
 		assertFalse("attributes shouldn't contains id field.", ro.getAttributes().containsKey("id"));
 		assertFalse(ro.getAttributes().containsKey("type"));
 		assertThat(ro.getType(), equalTo("myusernoannotations"));
