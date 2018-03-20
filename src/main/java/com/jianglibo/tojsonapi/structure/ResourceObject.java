@@ -31,6 +31,12 @@ public class ResourceObject implements CanAsMap {
 	
 	private final String requestUrl;
 	
+	
+	/**
+	 * 
+	 * @param requestUrl The requesting url which results this pojo.
+	 * @param pojo The result pojo to convert.
+	 */
 	protected ResourceObject(String requestUrl, Object pojo) {
 		this.requestUrl = requestUrl;
 		this.pojo = pojo;
@@ -104,17 +110,8 @@ public class ResourceObject implements CanAsMap {
 			this.attributes.remove("id");
 		}
 		
-//	      "creator" : {
-//	        "links" : {
-//	          "self" : "http://localhost/jsonapi/posts/884737/relationships/creator",
-//	          "related" : "http://localhost/jsonapi/posts/884737/creator"
-//	        }
-//	      },
-		
 		for(Field rf:  relationFields) {
 			JsonapiRelation jra = rf.getAnnotation(JsonapiRelation.class);
-//			Class<?> targetResourceClass = jra.targetResourceClass();
-//			String targetResourceName = AnnotationUtil.getResourceType(targetResourceClass)
 			String relationName = jra.name().isEmpty() ? rf.getName() : jra.name();
 			String thisResourceUrl = new ResourceUrl(getType(), getId()).calUrl(requestUrl);
 			String selfUrl =  thisResourceUrl + "/relationships/" + relationName;

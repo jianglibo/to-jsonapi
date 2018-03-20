@@ -10,11 +10,21 @@ public class JsonapiDocumentBuilder {
 	private final Pager pager;
 	
 
+	/**
+	 * 
+	 * @param pager {@link Pager}, a pager object to generate paginate links.
+	 */
 	public JsonapiDocumentBuilder(Pager pager) {
 		super();
 		this.pager = pager;
 	}
 	
+	/**
+	 * 
+	 * @param resource The entity to be convert
+	 * @param requestUrl The requesting url which results the entities, the links in jsonapi document
+	 * @return be built document.
+	 */
 	public JsonApiDocument buildSingleResource(Object resource, String requestUrl) {
 		ResourceObject ro = new ResourceObjectBuilder(requestUrl).build(resource);
 		JsonApiDocument jad = new JsonApiDocument(ro);
@@ -23,10 +33,10 @@ public class JsonapiDocumentBuilder {
 	
 	/**
 	 * 
-	 * @param resources
-	 * @param totalResourceCount
-	 * @param requestUrl
-	 * @return
+	 * @param resources List of entities to be converted.
+	 * @param totalResourceCount Total number of the resources to paginate. 
+	 * @param requestUrl The requesting url which results the entities, the links in jsonapi document 
+	 * @return built document.
 	 * 
 	 * requestUrl must be kind of /baseUrl/pluralResourceName?page[limit]=10.
 	 * Why not extract resource name from urls?  Because you cannot image embedded resource names from request urls. 
