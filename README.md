@@ -3,6 +3,17 @@
 Do only one thing, formatting entities to jsonapi format. No extra dependencies, except java sdk. It results a hashmap which you can use any json library to convert to json format.
 
 ## examples
+maven dependency.
+```xml
+<!-- https://mvnrepository.com/artifact/com.go2wheel/to-jsonapi -->
+<dependency>
+    <groupId>com.go2wheel</groupId>
+    <artifactId>to-jsonapi</artifactId>
+    <version>0.1.0</version>
+</dependency>
+
+```
+
 ```java
 @JsonapiResource(type="hello")
 public class MyUserWithAnnotation extends BaseModel {
